@@ -1,0 +1,28 @@
+{
+  "brief": { "title": "Senior Brand Partnerships Manager", "client": "a creator agency (example)", "location": "Miami", "remote": false, "mustHave": ["brand partnerships", "creator management", "negotiation"], "niceToHave": ["TikTok Shop", "HubSpot", "Spanish"], "minYears": 4, "salaryMax": 110000, "sponsor": false },
+  "candidates": [
+    { "id": "C1", "name": "Jordan Ellis", "skills": ["brand partnerships", "creator management", "negotiation", "HubSpot"], "years": 6, "location": "Miami", "salaryAsk": 105000, "visa": "citizen", "email": "jordan.e@example.com", "source": "Recruiting portal" },
+    { "id": "C2", "name": "Ana Torres", "skills": ["brand partnerships", "creator management", "negotiation", "TikTok Shop", "Spanish"], "years": 5, "location": "Miami", "salaryAsk": 118000, "visa": "citizen", "email": "ana.torres@example.com", "source": "Referral" },
+    { "id": "C3", "name": "Marcus Webb", "skills": ["brand partnerships", "negotiation"], "years": 9, "location": "Miami", "salaryAsk": 100000, "visa": "citizen", "email": "mwebb@example.com", "source": "Recruiting portal" },
+    { "id": "C4", "name": "Priya Raman", "skills": ["brand partnerships", "creator management", "negotiation", "HubSpot"], "years": 7, "location": "Austin", "relocate": true, "salaryAsk": 100000, "visa": "citizen", "email": "priya.r@example.com", "source": "LinkedIn" },
+    { "id": "C5", "name": "Leo Martins", "skills": ["brand partnerships", "creator management", "negotiation", "Spanish"], "years": 4, "location": "Miami", "salaryAsk": 98000, "visa": "needs sponsorship", "email": "leo.m@example.com", "source": "Recruiting portal" },
+    { "id": "C6", "name": "Chloe Park", "skills": ["brand partnerships", "creator management", "negotiation", "HubSpot"], "location": "Miami", "salaryAsk": 95000, "visa": "unknown", "email": "chloe.park@example.com", "source": "Inbound" },
+    { "id": "C7", "name": "Sam Rivera", "skills": ["brand partnerships", "creator management", "negotiation", "TikTok Shop"], "years": 3, "location": "Miami", "salaryAsk": 85000, "visa": "citizen", "email": "sam.r@example.com", "source": "Recruiting portal" },
+    { "id": "C8", "name": "Dana Lee", "skills": ["brand partnerships", "creator management", "negotiation", "HubSpot", "Spanish"], "years": 8, "location": "Miami", "salaryAsk": 140000, "visa": "citizen", "email": "dana.lee@example.com", "source": "LinkedIn" },
+    { "skills": [] }
+  ],
+  "memory": [
+    { "type": "salary", "outcome": "approved", "candidate": "Riley Chen", "text": "asks $120,000, 9% over the $110,000 max", "by": "Victoria", "at": "2026-10-20" },
+    { "type": "visa", "outcome": "rejected", "candidate": "Tom Ito", "text": "work authorization unknown", "by": "Victoria", "at": "2026-10-18" }
+  ],
+  "apps": [
+    { "name": "Gmail", "hasApi": true, "needsLogin": true },
+    { "name": "Google Calendar", "hasApi": true, "needsLogin": true },
+    { "name": "Notion", "hasMcp": true },
+    { "name": "Slack", "hasMcp": true },
+    { "name": "Recruiting portal (web, no public API)", "web": true, "authorized": true },
+    { "name": "Community platform (CSV export only)", "hasExport": true },
+    { "name": "Creator CRM (desktop, licence allows analysis)", "desktop": true, "authorized": true, "licenceAllowsAnalysis": true },
+    { "name": "Brand deal tracker (desktop, licence forbids it)", "desktop": true, "authorized": true, "licenceAllowsAnalysis": false }
+  ]
+}

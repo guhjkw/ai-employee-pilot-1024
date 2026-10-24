@@ -1,0 +1,224 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>AI Employee Pilot</title>
+<meta name="description" content="A live preview of one AI employee for recruiting and creator-agency work: candidates screened with evidence, exceptions sent to a person with past decisions cited, approved candidates handed to a scheduling agent, plus a rule for how an agent should reach each business app.">
+<style>
+
+  :root { --bg:#0f1214; --surface:#161b1e; --surface-2:#1c2226; --border:#283036; --text:#e8edf0; --muted:#98a6ad; --gold:#e3b341; --good:#4ade80;
+          --sans:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Helvetica,Arial,sans-serif; --mono:ui-monospace,SFMono-Regular,Menlo,Consolas,monospace; }
+  * { box-sizing:border-box; } [hidden] { display:none !important; }
+  html { -webkit-text-size-adjust:100%; }
+  body { margin:0; background:var(--bg); color:var(--text); font:16px/1.55 var(--sans); }
+  .wrap { max-width:1320px; margin:0 auto; padding:0 16px; }
+  .topbar { border-bottom:1px solid var(--border); } .topbar .wrap { display:flex; justify-content:space-between; align-items:center; gap:12px; padding-top:12px; padding-bottom:12px; }
+  .eyebrow { font-size:13px; letter-spacing:.06em; text-transform:uppercase; color:var(--muted); }
+  .pill { font-size:12px; border:1px solid var(--border); border-radius:999px; padding:3px 10px; color:var(--muted); white-space:nowrap; }
+  .hero { padding:34px 0 18px; } h1 { font-size:clamp(28px,4vw,42px); line-height:1.12; margin:6px 0 12px; letter-spacing:-.01em; max-width:30ch; }
+  .lede { color:var(--muted); font-size:18px; max-width:84ch; margin:0; } .lede strong { color:var(--text); }
+  section { padding:26px 0; } h2 { font-size:23px; margin:0 0 6px; } .sub { color:var(--muted); margin:0 0 18px; }
+  .benefits { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin-top:22px; }
+  .benefits div { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:14px 16px; font-size:15px; color:var(--muted); } .benefits b { color:var(--text); display:block; font-size:16px; margin-bottom:2px; }
+
+  
+  /* ---------- app: AI employee console ---------- */
+  .app { border-radius:12px; overflow:hidden; border:1px solid #3a444a; box-shadow:0 20px 60px rgba(0,0,0,.45); background:#f7f7f9; color:#1d1d24; font:13px/1.5 var(--sans); }
+  .abar { display:flex; gap:10px; align-items:center; flex-wrap:wrap; padding:10px 14px; background:#24243a; color:#fff; } .abar b { font-size:14px; } .abar small { color:#c2c2dc; } .abar .sp { flex:1; }
+  .abar button, .b3 { font:600 12px var(--sans); border-radius:6px; padding:4px 10px; cursor:pointer; } .abar button { background:transparent; color:#fff; border:1px solid #6d6d9c; }
+  .grid4 { display:grid; grid-template-columns:minmax(0,.8fr) minmax(0,1.6fr) minmax(0,1fr); }
+  .c { padding:12px; border-right:1px solid #e3e3ea; min-width:0; } .c:last-child { border-right:0; } .c h4 { margin:0 0 8px; font-size:12px; text-transform:uppercase; letter-spacing:.05em; color:#6b6b80; display:flex; justify-content:space-between; gap:6px; }
+  .f { display:block; font-size:11.5px; color:#6b6b80; margin:6px 0 2px; } .c input[type=text], .c input[type=number] { width:100%; font:12.5px var(--sans); border:1px solid #d3d3de; border-radius:6px; padding:5px 7px; background:#fff; color:#1d1d24; }
+  .tog2 { display:flex; gap:6px; align-items:center; font-size:12.5px; margin-top:6px; }
+  table.cand { width:100%; border-collapse:collapse; font-size:12.5px; } table.cand th { text-align:left; font-size:11px; color:#6b6b80; text-transform:uppercase; padding:5px 6px; border-bottom:1px solid #e3e3ea; } table.cand td { padding:6px; border-bottom:1px solid #eeeef3; vertical-align:top; background:#fff; }
+  .dp { font:700 11px var(--sans); border-radius:999px; padding:1px 8px; white-space:nowrap; } .dp.shortlist { background:#e3f4e8; color:#1e6b3a; } .dp.approval { background:#fff1cc; color:#7a5200; } .dp.reject { background:#fde4dc; color:#a1311a; }
+  .ev { font-size:11.5px; color:#3c3c4a; } .ev .y { color:#1e6b3a; } .ev .n { color:#a1311a; } .ev .x { color:#7a5200; }
+  .q { background:#fff; border:1px solid #e3e3ea; border-radius:8px; padding:8px 10px; margin-bottom:8px; } .q b { font-size:13px; } .q .pre { font-size:11.5px; color:#4b4bb0; margin-top:3px; } .q .acts { display:flex; gap:6px; margin-top:6px; }
+  .b3.ok { background:#1e6b3a; color:#fff; border:0; } .b3.no { background:#fff; color:#a1311a; border:1px solid #e3b0a5; } .st3 { font-weight:700; font-size:12px; } .st3.approved { color:#1e6b3a; } .st3.rejected { color:#a1311a; }
+  .mem, .ho, .lg2 { list-style:none; margin:0; padding:0; font-size:12px; } .mem li, .ho li { padding:5px 0; border-top:1px solid #eeeef3; } .mem li:first-child, .ho li:first-child { border-top:0; }
+  .ho .dr { font-size:11.5px; color:#3c3c4a; background:#f1f1f6; border-radius:6px; padding:5px 7px; margin-top:3px; }
+  .lg2 li { font:11.5px var(--mono); color:#3c3c4a; padding:2px 0; } .lg2 b { color:#4b4bb0; }
+  .router { padding:12px; border-top:1px solid #e3e3ea; background:#fff; } table.rt { width:100%; border-collapse:collapse; font-size:12.5px; } table.rt th { text-align:left; font-size:11px; color:#6b6b80; text-transform:uppercase; padding:5px 6px; border-bottom:1px solid #e3e3ea; } table.rt td { padding:6px; border-bottom:1px solid #eeeef3; vertical-align:top; } table.rt td.ck { white-space:nowrap; font-size:11.5px; } table.rt label { display:inline-flex; gap:3px; align-items:center; margin-right:6px; }
+  .rp { font:700 11.5px var(--sans); } .rp.mcp { color:#4b4bb0; } .rp.api { color:#1e6b3a; } .rp.exp, .rp.br { color:#7a5200; } .rp.rea { color:#a1311a; } .rp.no { color:#6b6b80; }
+  .note2 { font-size:11.5px; color:#6b6b80; } .tblw { overflow-x:auto; }
+/* ---------- page ---------- */
+  .break { background:linear-gradient(0deg,rgba(227,179,65,.07),rgba(227,179,65,.07)),var(--surface); border:1px solid var(--border); border-radius:14px; padding:16px 18px; }
+  .cards2 { display:grid; grid-template-columns:1fr 1fr; gap:14px; }
+  .panel { background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:18px; min-width:0; } .panel h3 { margin:0 0 6px; font-size:16px; } .panel p { margin:0; color:var(--muted); font-size:14.5px; }
+  ol.steps { list-style:none; counter-reset:s; padding:0; margin:0; display:grid; grid-template-columns:repeat(4,minmax(0,1fr)); gap:14px; }
+  ol.steps li { counter-increment:s; background:var(--surface); border:1px solid var(--border); border-radius:14px; padding:16px; font-size:15px; }
+  ol.steps li::before { content:counter(s); display:inline-grid; place-items:center; width:26px; height:26px; border-radius:50%; background:var(--surface-2); border:1px solid var(--border); font-weight:700; margin-bottom:8px; }
+  ol.steps li.yours { border-color:var(--good); } .whom { display:block; font-size:12px; text-transform:uppercase; letter-spacing:.06em; color:var(--muted); margin-bottom:4px; } li.yours .whom { color:var(--good); }
+  .tiers { display:grid; grid-template-columns:1fr 1.3fr 1fr; gap:14px; align-items:start; }
+  .tier { background:var(--surface); border:1px solid var(--border); border-radius:16px; padding:20px; } .tier.featured { border:2px solid var(--gold); position:relative; }
+  .tier .badge2 { position:absolute; top:-12px; left:20px; background:var(--gold); color:#1a1405; font-weight:800; font-size:12px; letter-spacing:.05em; text-transform:uppercase; border-radius:6px; padding:3px 10px; }
+  .tier h3 { margin:0; font-size:18px; } .price { font-size:34px; font-weight:800; margin:6px 0 2px; } .price s { font-size:18px; color:var(--muted); font-weight:400; margin-left:8px; }
+  .tier .for { color:var(--muted); font-size:14px; margin:0 0 12px; } .tier ul { margin:0; padding-left:18px; font-size:14.5px; } .tier li { margin:4px 0; }
+  .stack { width:100%; border-collapse:collapse; font-size:14.5px; margin:10px 0 4px; } .stack td { padding:6px 0; border-bottom:1px solid var(--border); vertical-align:top; } .stack td:last-child { text-align:right; color:var(--muted); white-space:nowrap; padding-left:10px; }
+  .stack tr.bonus td:first-child::before { content:"Bonus · "; color:var(--gold); font-weight:700; } .stack tr.total td { border-bottom:0; font-weight:800; color:var(--text); padding-top:10px; } .stack tr.total td:last-child { color:var(--text); }
+  .ms { display:grid; grid-template-columns:repeat(3,minmax(0,1fr)); gap:14px; margin-top:16px; }
+  .ms .tag2 { font-size:12px; color:var(--gold); text-transform:uppercase; letter-spacing:.06em; font-weight:700; } .ms .mp { font-size:26px; font-weight:800; margin:2px 0; } .ms .days { color:var(--muted); font-size:13px; }
+  .ms ul { margin:8px 0; padding-left:18px; font-size:14.5px; } .ms .acc { font-size:13.5px; color:var(--muted); border-top:1px solid var(--border); padding-top:8px; } .ms .acc b { color:var(--text); }
+  .costs { margin-top:14px; font-size:14.5px; color:var(--muted); } .costs b { color:var(--text); }
+  .cta { background:var(--surface); border:2px solid var(--good); border-radius:16px; padding:24px; } .cta h2 { font-size:24px; } .cta p { margin:6px 0 0; max-width:80ch; } .cta .urgency { color:var(--muted); font-size:14px; margin-top:12px; }
+  .need { display:grid; grid-template-columns:repeat(2,minmax(0,1fr)); gap:8px 18px; padding-left:20px; margin:0; }
+  pre.tree { font:13px/1.6 var(--mono); background:var(--surface); border:1px solid var(--border); border-radius:12px; padding:14px 16px; overflow-x:auto; margin:0 0 10px; }
+  footer { border-top:1px solid var(--border); margin-top:18px; padding:22px 0 40px; color:var(--muted); font-size:14px; } footer p { margin:0 0 8px; max-width:95ch; }
+  
+  @media (max-width:1150px) { .grid4 { grid-template-columns:1fr; } .c { border-right:0; border-bottom:1px solid #e3e3ea; } }
+  @media (max-width:980px) { .cards2, .ms, .tiers, .benefits { grid-template-columns:1fr; } ol.steps { grid-template-columns:1fr 1fr; } .tier.featured { order:-1; } }
+  @media (max-width:560px) { ol.steps, .need { grid-template-columns:1fr; } .pill { display:none; } }
+  @media (prefers-reduced-motion:reduce) { * { transition:none !important; animation:none !important; } }
+</style>
+</head>
+<body>
+<header class="topbar"><div class="wrap"><span class="eyebrow">Role brief → AI employee screens with evidence → exceptions to you, with precedent → approved candidates to the scheduling agent · Live preview</span><span class="pill">Sample candidates · invented</span></div></header>
+<main class="wrap">
+  <div class="hero">
+    <span class="eyebrow">For a founder building a team of AI employees across recruiting, creator agency work and operations</span>
+    <h1>An AI employee that does the sourcing work, and asks you only about the judgement calls.</h1>
+    <p class="lede"><strong>This is a working preview, not a video.</strong> The recruiting employee screens every candidate against the role brief and shows the evidence. Anything that is a judgement call (salary stretch, relocation, unknown work status) goes to you with what you decided last time. Approved candidates move to a second agent that schedules and drafts outreach for your approval. Below it, the integration rule decides how an AI employee should reach each app you use, and when reverse-engineering is the right tool and when it is not.</p>
+    <div class="benefits">
+      <div><b>Reasons you can check</b>Every decision lists the requirement it met or missed, so you can audit it in seconds.</div>
+      <div><b>It learns your calls</b>Each approval or rejection is remembered and shown the next time the same question comes up.</div>
+      <div><b>Agents that hand off</b>Screening hands to scheduling, and nothing reaches a candidate without your approval.</div>
+    </div>
+  </div>
+
+  <div class="app" id="app" aria-label="AI employee preview">
+    <div class="abar"><b>AI employee · Recruiting</b><small id="role-l" data-testid="role-l"></small><span class="sp"></span><button type="button" id="reset" data-testid="reset">Reset sample</button></div>
+    <div class="grid4">
+      <div class="c"><h4>Role brief</h4>
+        <label class="f" for="b-must">Must-haves (comma separated)</label><input type="text" id="b-must" data-testid="b-must">
+        <label class="f" for="b-nice">Nice to have</label><input type="text" id="b-nice" data-testid="b-nice">
+        <label class="f" for="b-loc">Location</label><input type="text" id="b-loc" data-testid="b-loc">
+        <label class="f" for="b-sal">Salary max ($)</label><input type="number" id="b-sal" data-testid="b-sal">
+        <label class="f" for="b-yrs">Minimum years</label><input type="number" id="b-yrs" data-testid="b-yrs">
+        <label class="tog2"><input type="checkbox" id="b-remote" data-testid="b-remote">Remote OK</label>
+        <label class="tog2"><input type="checkbox" id="b-spon" data-testid="b-spon">Offers visa sponsorship</label>
+        <h4 style="margin-top:14px">Run log <span class="note2">tool calls simulated</span></h4><ul class="lg2" id="log" data-testid="log"></ul></div>
+      <div class="c"><h4>Candidates <span id="counts" data-testid="counts"></span></h4><div class="tblw"><table class="cand" aria-label="Candidates"><thead><tr><th>Candidate</th><th>Decision</th><th>Evidence</th><th>Score</th></tr></thead><tbody id="cands" data-testid="cands"></tbody></table></div><div class="note2" id="skipped" data-testid="skipped" style="margin-top:6px"></div></div>
+      <div class="c"><h4>Waiting for you <span id="qn" data-testid="qn"></span></h4><div id="queue" data-testid="queue"></div>
+        <h4 style="margin-top:12px">Handed to scheduling agent</h4><ul class="ho" id="ho" data-testid="ho"></ul>
+        <h4 style="margin-top:12px">Memory of your decisions</h4><ul class="mem" id="mem" data-testid="mem"></ul></div>
+    </div>
+    <div class="router"><h4 style="margin:0 0 8px;font-size:12px;text-transform:uppercase;letter-spacing:.05em;color:#6b6b80">How should an AI employee reach each app?</h4><div class="tblw"><table class="rt" aria-label="Integration routes"><thead><tr><th>App</th><th>What it has</th><th>Route</th><th>Why, and the cautions</th></tr></thead><tbody id="routes" data-testid="routes"></tbody></table></div></div>
+  </div>
+
+  <section aria-label="Try to break it">
+    <div class="break"><strong>Try to break it.</strong> Approve Ana Torres: her salary stretch is remembered, she moves to the scheduling agent, and the next salary question cites her. Tick "Remote OK" and Priya no longer needs your approval. Add "Spanish" to the must-haves and watch the shortlist shrink. Raise the salary max to 145,000 and Dana comes back. In the app table, untick "licence allows analysis" on the Creator CRM and the reverse-engineering route disappears.</div>
+  </section>
+
+  <section aria-labelledby="how-h">
+    <h2 id="how-h">How the pilot works</h2>
+    <p class="sub">Four steps, one of them yours.</p>
+    <ol class="steps">
+      <li class="yours"><span class="whom">You</span>Walk me through the apps and the three workflows that take the most of your week.</li>
+      <li><span class="whom">Me</span>Map every app to a route (MCP, API, export, browser, or a licensed reverse-engineering study) and propose the architecture.</li>
+      <li><span class="whom">Me</span>Build one AI employee end to end in Claude Code: tools, approval queue in Slack, shared memory, and a test set of real cases.</li>
+      <li><span class="whom">Me</span>Run it on live work for a week, tune it, then plan the next employees on the same foundation.</li>
+    </ol>
+  </section>
+
+  <section aria-labelledby="price-h">
+    <h2 id="price-h">Packages</h2>
+    <p class="sub">Hourly at $40/hr through Upwork for the paid discovery and pilot.</p>
+    <div class="tiers">
+      <div class="tier"><h3>Discovery</h3><div class="price">$320</div><p class="for">About eight hours.</p><ul><li>Workflow assessment and opportunity map</li><li>A route for every app you use</li><li>Architecture for your AI employees</li></ul></div>
+      <div class="tier featured" data-testid="featured"><span class="badge2">Best value</span><h3>Discovery and first AI employee</h3>
+        <div class="price">$1,520<s>$3,040</s></div><p class="for">About thirty-eight hours: discovery plus one employee on a real workflow.</p>
+        <table class="stack" aria-label="What is included">
+          <tr><td>Workflow assessment and opportunity map</td><td>$320</td></tr>
+          <tr><td>Architecture for multiple AI employees</td><td>$320</td></tr>
+          <tr><td>First AI employee on your tools, built in Claude Code</td><td>$800</td></tr>
+          <tr><td>Approval queue in Slack</td><td>$300</td></tr>
+          <tr><td>Shared memory of your decisions</td><td>$300</td></tr>
+          <tr><td>Test set of real cases and documentation</td><td>$400</td></tr>
+          <tr class="bonus"><td>Integration route for every app you use</td><td>$300</td></tr>
+          <tr class="bonus"><td>Loom walkthrough of the build</td><td>$300</td></tr>
+          <tr class="total"><td>Value if bought separately</td><td>$3,040</td></tr>
+        </table></div>
+      <div class="tier"><h3>Three AI employees</h3><div class="price">$3,800</div><p class="for">About ninety-five hours.</p><ul><li>Recruiting, creator operations and executive assistant</li><li>Agents that hand work to each other</li><li>Weekly tuning for a month</li></ul></div>
+    </div>
+  </section>
+
+  <section aria-label="Next step">
+    <div class="cta"><h2>Send me one role and ten anonymized candidates.</h2>
+      <p>Reply in our Upwork chat with a real brief and ten profiles with names removed. I'll run them through this employee and send back the shortlist, the questions it would ask you, and the reasons, before you hire anyone.</p>
+      <p class="urgency">I can start the discovery this week.</p></div>
+  </section>
+
+  <section aria-labelledby="need-h">
+    <h2 id="need-h">What I need from you to start</h2>
+    <ul class="need"><li>A list of the apps you use and how you log in to each.</li><li>Three workflows you want off your plate first.</li><li>A Claude account and a Slack workspace for approvals.</li><li>Past examples of good and bad outcomes for the first workflow.</li></ul>
+  </section>
+
+  <section aria-labelledby="hood-h">
+    <h2 id="hood-h">Under the hood</h2>
+    <pre class="tree">ai-employee-pilot/
+  index.html               this page
+  src/aiEmployee.js        screening with evidence, exceptions, precedent, approvals, memory, handoffs, integration routes
+  data/sample.json         invented role brief, candidates, past decisions and apps
+  tests/verify.js          27 tests against src/aiEmployee.js
+  tests/browser-check.py   drives this page in a real browser</pre>
+    <p class="sub">The page and the tests load the same engine file. In your build Claude reads the profiles into these fields and runs the tools through MCP; the decisions, approvals and memory stay in code so they are the same every time. Hand src/ and tests/ to a developer, or never open them.</p>
+  </section>
+</main>
+<footer><div class="wrap">
+  <p>Built from the job post. Every candidate, role, decision and app setting is invented, the tool calls in the run log are simulated, and nothing here is connected to your apps. The screening, approval, memory, handoff and routing logic and the 27 passing tests are real. No REA experience is claimed: the routing rule shows when a reverse-engineering study would be appropriate, not a REA run. This page will be taken down about 30 days after it was sent.</p>
+  <p>Built by Taiwo, Pathfinder Automation Solutions.</p>
+</div></footer>
+<script src="src/aiEmployee.js"></script>
+<script>
+(function () {
+  'use strict';
+  var FALLBACK = {"brief":{"title":"Senior Brand Partnerships Manager","client":"a creator agency (example)","location":"Miami","remote":false,"mustHave":["brand partnerships","creator management","negotiation"],"niceToHave":["TikTok Shop","HubSpot","Spanish"],"minYears":4,"salaryMax":110000,"sponsor":false},"candidates":[{"id":"C1","name":"Jordan Ellis","skills":["brand partnerships","creator management","negotiation","HubSpot"],"years":6,"location":"Miami","salaryAsk":105000,"visa":"citizen","email":"jordan.e@example.com","source":"Recruiting portal"},{"id":"C2","name":"Ana Torres","skills":["brand partnerships","creator management","negotiation","TikTok Shop","Spanish"],"years":5,"location":"Miami","salaryAsk":118000,"visa":"citizen","email":"ana.torres@example.com","source":"Referral"},{"id":"C3","name":"Marcus Webb","skills":["brand partnerships","negotiation"],"years":9,"location":"Miami","salaryAsk":100000,"visa":"citizen","email":"mwebb@example.com","source":"Recruiting portal"},{"id":"C4","name":"Priya Raman","skills":["brand partnerships","creator management","negotiation","HubSpot"],"years":7,"location":"Austin","relocate":true,"salaryAsk":100000,"visa":"citizen","email":"priya.r@example.com","source":"LinkedIn"},{"id":"C5","name":"Leo Martins","skills":["brand partnerships","creator management","negotiation","Spanish"],"years":4,"location":"Miami","salaryAsk":98000,"visa":"needs sponsorship","email":"leo.m@example.com","source":"Recruiting portal"},{"id":"C6","name":"Chloe Park","skills":["brand partnerships","creator management","negotiation","HubSpot"],"location":"Miami","salaryAsk":95000,"visa":"unknown","email":"chloe.park@example.com","source":"Inbound"},{"id":"C7","name":"Sam Rivera","skills":["brand partnerships","creator management","negotiation","TikTok Shop"],"years":3,"location":"Miami","salaryAsk":85000,"visa":"citizen","email":"sam.r@example.com","source":"Recruiting portal"},{"id":"C8","name":"Dana Lee","skills":["brand partnerships","creator management","negotiation","HubSpot","Spanish"],"years":8,"location":"Miami","salaryAsk":140000,"visa":"citizen","email":"dana.lee@example.com","source":"LinkedIn"},{"skills":[]}],"memory":[{"type":"salary","outcome":"approved","candidate":"Riley Chen","text":"asks $120,000, 9% over the $110,000 max","by":"Victoria","at":"2026-10-20"},{"type":"visa","outcome":"rejected","candidate":"Tom Ito","text":"work authorization unknown","by":"Victoria","at":"2026-10-18"}],"apps":[{"name":"Gmail","hasApi":true,"needsLogin":true},{"name":"Google Calendar","hasApi":true,"needsLogin":true},{"name":"Notion","hasMcp":true},{"name":"Slack","hasMcp":true},{"name":"Recruiting portal (web, no public API)","web":true,"authorized":true},{"name":"Community platform (CSV export only)","hasExport":true},{"name":"Creator CRM (desktop, licence allows analysis)","desktop":true,"authorized":true,"licenceAllowsAnalysis":true},{"name":"Brand deal tracker (desktop, licence forbids it)","desktop":true,"authorized":true,"licenceAllowsAnalysis":false}]};
+  var E = window.AIEmployee, $ = function (id) { return document.getElementById(id); };
+  function esc(s) { return String(s === null || s === undefined ? '' : s).replace(/[&<>"']/g, function (c) { return { '&': '&amp;', '<': '&lt;', '>': '&gt;', '"': '&quot;', "'": '&#39;' }[c]; }); }
+  function clone(o) { return JSON.parse(JSON.stringify(o)); }
+  function list(v) { return v.split(',').map(function (x) { return x.trim(); }).filter(Boolean); }
+  var ORIG, D, decisions = {};
+  function load(d) { ORIG = clone(d); D = clone(d); decisions = {}; toForm(); render(); }
+  function toForm() { var b = D.brief; $('b-must').value = b.mustHave.join(', '); $('b-nice').value = b.niceToHave.join(', '); $('b-loc').value = b.location; $('b-sal').value = b.salaryMax; $('b-yrs').value = b.minYears; $('b-remote').checked = !!b.remote; $('b-spon').checked = !!b.sponsor; }
+  function fromForm() { var b = D.brief; b.mustHave = list($('b-must').value); b.niceToHave = list($('b-nice').value); b.location = $('b-loc').value.trim(); b.salaryMax = Number($('b-sal').value) || 0; b.minYears = Number($('b-yrs').value) || 0; b.remote = $('b-remote').checked; b.sponsor = $('b-spon').checked; }
+  function render() {
+    // Replay the person's decisions over a fresh screen, so memory and handoffs stay consistent with the brief.
+    var mem = clone(D.memory), S = E.screen(D.brief, D.candidates, mem);
+    Object.keys(decisions).forEach(function (id) { if (S.queue.some(function (q) { return q.id === id; })) E.decide(S.queue, id, decisions[id], mem, 'Victoria', '2026-10-24'); });
+    S = (function () { var again = E.screen(D.brief, D.candidates, mem); again.queue.forEach(function (q) { if (decisions[q.id]) q.status = decisions[q.id] === 'approve' ? 'approved' : 'rejected'; }); return again; })();
+    var H = E.handoffs(S, S.queue, D.brief);
+    $('role-l').textContent = D.brief.title + ' · ' + (D.brief.remote ? 'remote' : D.brief.location);
+    var n = { shortlist: 0, 'needs approval': 0, reject: 0 }; S.results.forEach(function (r) { n[r.decision]++; });
+    $('counts').textContent = n.shortlist + ' shortlist · ' + n['needs approval'] + ' to you · ' + n.reject + ' rejected';
+    $('cands').innerHTML = S.results.map(function (r) {
+      var dec = decisions[r.id] && r.decision === 'needs approval' ? (decisions[r.id] === 'approve' ? 'approved by you' : 'rejected by you') : r.decision;
+      var cls = dec === 'shortlist' || dec === 'approved by you' ? 'shortlist' : dec === 'reject' || dec === 'rejected by you' ? 'reject' : 'approval';
+      var ev = r.evidence.map(function (x) { return '<span class="y">✓ ' + esc(x) + '</span>'; }).concat(r.nice.map(function (x) { return '<span class="y">+ ' + esc(x) + '</span>'; }), r.rejects.map(function (x) { return '<span class="n">✕ ' + esc(x) + '</span>'; }), r.exceptions.map(function (x) { return '<span class="x">? ' + esc(x.text) + '</span>'; })).join('<br>');
+      return '<tr data-testid="cand-' + r.id + '" data-dec="' + esc(dec) + '"><td><b>' + esc(r.name) + '</b><br><span class="note2">' + esc(r.source) + '</span></td><td><span class="dp ' + cls + '">' + esc(dec) + '</span></td><td class="ev">' + ev + '</td><td>' + r.score + '</td></tr>';
+    }).join('');
+    $('skipped').textContent = S.skipped.length ? 'Skipped: ' + S.skipped.map(function (x) { return (x.row ? 'row ' + x.row + ' ' : '') + '(' + x.reason + ')'; }).join('; ') : '';
+    var waiting = S.queue.filter(function (q) { return q.status === 'waiting'; }).length;
+    $('qn').textContent = waiting + ' waiting';
+    $('queue').innerHTML = S.queue.map(function (q) {
+      return '<div class="q" data-testid="q-' + q.id + '"><b>' + esc(q.name) + '</b><div class="ev">' + q.exceptions.map(function (x) { return '? ' + esc(x.text); }).join('<br>') + '</div>' + (q.status !== 'waiting' ? [] : q.precedent).map(function (p) { return '<div class="pre">Last time: you ' + esc(p.outcome) + ' ' + esc(p.candidate) + ' (' + esc(p.text) + ') on ' + esc(p.at) + '</div>'; }).join('') + (q.status === 'waiting' ? '<div class="acts"><button type="button" class="b3 ok" data-d="approve" data-id="' + q.id + '" data-testid="ap-' + q.id + '">Approve</button><button type="button" class="b3 no" data-d="reject" data-id="' + q.id + '" data-testid="rj-' + q.id + '">Reject</button></div>' : '<div class="st3 ' + q.status + '">' + q.status + '</div>') + '</div>';
+    }).join('') || '<div class="note2">Nothing needs you right now.</div>';
+    $('ho').innerHTML = H.map(function (h) { return '<li data-testid="ho-item"><b>' + esc(h.candidate) + '</b> → ' + esc(h.to) + '<br><span class="note2">' + esc(h.task) + ' · ' + esc(h.status) + '</span><div class="dr">' + esc(h.draft) + '</div></li>'; }).join('') || '<li class="note2">No one yet.</li>';
+    $('mem').innerHTML = mem.slice().reverse().map(function (m) { return '<li data-testid="mem-item">' + esc(m.at) + ': ' + esc(m.outcome) + ' ' + esc(m.candidate) + ' <span class="note2">(' + esc(m.type) + ': ' + esc(m.text) + ')</span></li>'; }).join('');
+    $('log').innerHTML = ['<b>read</b> role brief: ' + D.brief.mustHave.length + ' must-haves', '<b>tool</b> portal.search_candidates → ' + (D.candidates.length) + ' rows', '<b>check</b> ' + S.results.length + ' screened, ' + S.skipped.length + ' skipped', '<b>memory</b> ' + mem.length + ' past decisions loaded', '<b>slack</b> approval_request × ' + S.queue.length, '<b>handoff</b> scheduling_agent × ' + H.length].map(function (x) { return '<li>' + x + '</li>'; }).join('');
+    $('routes').innerHTML = D.apps.map(function (a, i) {
+      var r = E.route(a), cls = { 'MCP server': 'mcp', 'Official API': 'api', 'Scheduled export': 'exp', 'Browser automation': 'br', 'Reverse-engineering study (e.g. REA)': 'rea' }[r.route] || 'no';
+      var flags = [['hasMcp', 'MCP'], ['hasApi', 'API'], ['hasExport', 'export'], ['web', 'web'], ['desktop', 'desktop'], ['authorized', 'our account'], ['licenceAllowsAnalysis', 'licence allows analysis']];
+      return '<tr data-testid="rt-' + i + '"><td><b>' + esc(a.name) + '</b></td><td class="ck">' + flags.map(function (f) { return '<label><input type="checkbox" data-a="' + i + '" data-k="' + f[0] + '"' + (a[f[0]] ? ' checked' : '') + ' data-testid="ck-' + i + '-' + f[0] + '">' + f[1] + '</label>'; }).join('') + '</td><td><span class="rp ' + cls + '" data-testid="route-' + i + '">' + esc(r.route) + '</span></td><td class="note2">' + esc(r.why.join('; ')) + (r.cautions.length ? '<br>' + esc(r.cautions.join('; ')) : '') + '</td></tr>';
+    }).join('');
+  }
+  ['b-must', 'b-nice', 'b-loc', 'b-sal', 'b-yrs'].forEach(function (id) { $(id).addEventListener('input', function () { fromForm(); render(); }); });
+  ['b-remote', 'b-spon'].forEach(function (id) { $(id).addEventListener('change', function () { fromForm(); render(); }); });
+  $('queue').addEventListener('click', function (e) { var b = e.target.closest('[data-d]'); if (b) { decisions[b.dataset.id] = b.dataset.d; render(); } });
+  $('routes').addEventListener('change', function (e) { var el = e.target; if (el.dataset.a === undefined) return; D.apps[+el.dataset.a][el.dataset.k] = el.checked; render(); });
+  $('reset').addEventListener('click', function () { load(ORIG); });
+  fetch('data/sample.json').then(function (r) { if (!r.ok) throw new Error(r.status); return r.json(); }).then(load).catch(function () { load(FALLBACK); });
+})();
+</script>
+</body>
+</html>

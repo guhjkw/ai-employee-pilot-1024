@@ -1,0 +1,35 @@
+0. HTML tag balance
+PASS: all tags closed and nested
+1. Sample screen
+PASS: 1 shortlist, 3 to you, 4 rejected
+PASS: Ana's salary question cites the earlier Riley Chen approval
+PASS: only Jordan is handed to scheduling at first
+
+2. Decisions
+PASS: approve Ana: she is handed to scheduling and remembered
+PASS: reject Chloe: remembered, not handed off
+PASS: waiting count drops to 1
+
+3. Change the brief
+PASS: Remote OK: Priya no longer needs approval
+PASS: add Spanish as a must-have: Jordan is rejected for missing it
+PASS: salary max 145,000: Dana comes back
+PASS: an empty must-have list is refused with the reason
+PASS: reset restores the sample
+
+4. Integration routes
+PASS: Notion and Slack via MCP, Gmail via API
+PASS: licensed desktop CRM with analysis allowed: reverse-engineering study
+PASS: untick the licence: the route becomes do not automate
+PASS: give the brand deal tracker an API: official API wins
+
+5. Phone width
+PASS: no horizontal page scroll at 390px
+
+6. Off disk (file://, fallback data)
+PASS: file:// copy works on the embedded data
+
+7. Console
+PASS: zero console or page errors
+
+19 passed, 0 failed

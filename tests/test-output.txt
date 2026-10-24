@@ -1,0 +1,36 @@
+1. Screening against the brief
+PASS: 8 candidates: 1 shortlist, 3 need approval, 4 rejected, 1 bad row skipped
+PASS: Jordan Ellis: every must-have with evidence, inside salary, shortlisted
+PASS: Marcus Webb: rejected for missing creator management
+PASS: Ana Torres: 7% over the salary max goes to a person, not rejected
+PASS: Dana Lee: 27% over the max is beyond the 15% stretch: rejected
+PASS: Priya Raman in Austin, willing to relocate: needs approval
+PASS: Leo Martins needs sponsorship the role does not offer: rejected
+PASS: Chloe Park: unknown years and unknown visa are flagged, not guessed
+PASS: Sam Rivera with 3 years against a 4-year minimum: rejected
+PASS: nice-to-haves raise the score: Ana (2 of 3) outscores Jordan (1 of 3)
+PASS: make the role remote and Priya no longer needs the relocation approval
+PASS: a brief with no must-haves is refused, not run
+
+2. Approvals and memory
+PASS: Ana's salary exception cites the earlier approval for Riley Chen
+PASS: Chloe's visa question cites the earlier rejection for Tom Ito
+PASS: approving Ana writes the decision to memory
+PASS: a second decision on the same person is refused
+PASS: an unknown verdict is refused
+PASS: next run, the latest salary precedent is Ana Torres
+
+3. Handoff to the scheduling agent
+PASS: approved Ana and shortlisted Jordan go to the scheduling agent; nobody else
+PASS: outreach drafts name their real strengths and wait for approval
+
+4. How to reach each app
+PASS: Gmail and Calendar: official API; Notion and Slack: MCP server
+PASS: web portal with no API, own account: browser automation with a terms check
+PASS: CSV-only platform: scheduled export, read-only
+PASS: licensed desktop app whose licence allows analysis: reverse-engineering study, clean room
+PASS: licence forbids it: do not automate
+PASS: no authorized account: do not automate, even with nothing else available
+PASS: an API beats reverse-engineering even when both are possible
+
+27 passed, 0 failed
